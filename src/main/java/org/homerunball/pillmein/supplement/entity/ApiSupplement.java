@@ -1,34 +1,31 @@
 package org.homerunball.pillmein.supplement.entity;
 
+import lombok.*;
 import org.homerunball.pillmein.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
-@Table(name = "api_supplements")
 @Getter
 @Setter
 @NoArgsConstructor
-public class ApiSupplement extends BaseTimeEntity {
+@AllArgsConstructor
+@Builder
+@Table(name = "api_supplements")
+public class ApiSupplement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "api_id")
-    private String apiId;
-
-    @Column(name = "name")
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "ingredients")
+    @Column(columnDefinition = "TEXT")
     private String ingredients;
 
-    @Column(name = "effects")
+    @Column(columnDefinition = "TEXT")
     private String effects;
 
-    @Column(name = "warnings")
+    @Column(columnDefinition = "TEXT")
     private String warnings;
 }
