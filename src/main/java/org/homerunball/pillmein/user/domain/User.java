@@ -1,6 +1,6 @@
-package org.homerunball.pillmein.user.entity;
+package org.homerunball.pillmein.user.domain;
 
-import org.homerunball.pillmein.common.entity.BaseTimeEntity;
+import org.homerunball.pillmein.common.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package org.homerunball.pillmein.intake.entity.enums;
+package org.homerunball.pillmein.intake.domain.enums;
 
 public enum RepeatType {
     DAILY,
