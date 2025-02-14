@@ -1,10 +1,10 @@
 package org.homerunball.pillmein.auth.service;
 
 import org.homerunball.pillmein.auth.controller.dto.AuthApiResponse;
-import org.homerunball.pillmein.auth.entity.UserAuth;
+import org.homerunball.pillmein.auth.domain.UserAuth;
 import org.homerunball.pillmein.auth.repository.UserAuthRepository;
-import org.homerunball.pillmein.user.entity.User;
-import org.homerunball.pillmein.user.entity.UserSurvey;
+import org.homerunball.pillmein.user.domain.User;
+import org.homerunball.pillmein.user.domain.UserSurvey;
 import org.homerunball.pillmein.user.repository.UserRepository;
 import org.homerunball.pillmein.user.repository.UserSurveyRepository;
 import org.springframework.stereotype.Service;

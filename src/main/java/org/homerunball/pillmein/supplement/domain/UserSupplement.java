@@ -1,18 +1,18 @@
-package org.homerunball.pillmein.supplement.entity;
+package org.homerunball.pillmein.supplement.domain;
 
-import org.homerunball.pillmein.common.entity.BaseTimeEntity;
-import org.homerunball.pillmein.user.entity.User;
+import org.homerunball.pillmein.common.domain.BaseTimeEntity;
+import org.homerunball.pillmein.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "favorites")
+@Table(name = "user_supplements")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Favorite extends BaseTimeEntity {
+public class UserSupplement extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +23,12 @@ public class Favorite extends BaseTimeEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "api_supplement_id", nullable = false)
+    @JoinColumn(name = "api_supplement_id")
     private ApiSupplement apiSupplement;
 
-    @Column(name = "img_url")
-    private String imgUrl;
+    @Column(name = "supplement_name")
+    private String supplementName;
+
+    @Column(name = "ingredients")
+    private String ingredients;
 }

@@ -1,4 +1,4 @@
-package org.homerunball.pillmein.common.entity;
+package org.homerunball.pillmein.common.domain;
 
 import java.time.LocalDateTime;
 

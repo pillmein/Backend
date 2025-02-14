@@ -1,11 +1,11 @@
-package org.homerunball.pillmein.intake.entity;
+package org.homerunball.pillmein.intake.domain;
 
 import java.time.LocalTime;
 
-import org.homerunball.pillmein.common.entity.BaseTimeEntity;
-import org.homerunball.pillmein.intake.entity.enums.RepeatType;
-import org.homerunball.pillmein.user.entity.User;
-import org.homerunball.pillmein.supplement.entity.UserSupplement;
+import org.homerunball.pillmein.common.domain.BaseTimeEntity;
+import org.homerunball.pillmein.intake.domain.enums.RepeatType;
+import org.homerunball.pillmein.user.domain.User;
+import org.homerunball.pillmein.supplement.domain.UserSupplement;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

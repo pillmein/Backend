@@ -1,7 +1,6 @@
-package org.homerunball.pillmein.supplement.entity;
+package org.homerunball.pillmein.supplement.domain;
 
 import lombok.*;
-import org.homerunball.pillmein.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 
 @Entity
