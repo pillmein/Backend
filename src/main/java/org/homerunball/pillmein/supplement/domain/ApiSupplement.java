@@ -27,4 +27,7 @@ public class ApiSupplement {
 
     @Column(columnDefinition = "TEXT")
     private String warnings;
+
+    @Column(columnDefinition = "tsvector")
+    private String nameTsv;
 }
