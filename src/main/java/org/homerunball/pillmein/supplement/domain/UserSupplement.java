@@ -22,10 +22,6 @@ public class UserSupplement extends BaseTimeEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "api_supplement_id")
-    private ApiSupplement apiSupplement;
-
     @Column(name = "supplement_name")
     private String supplementName;
 
