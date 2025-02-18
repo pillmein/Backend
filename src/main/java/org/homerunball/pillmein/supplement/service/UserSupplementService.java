@@ -1,0 +1,33 @@
+package org.homerunball.pillmein.supplement.service;
+
+import org.homerunball.pillmein.supplement.controller.dto.UserSupplementRequest;
+import org.homerunball.pillmein.supplement.domain.UserSupplement;
+import org.homerunball.pillmein.supplement.repository.UserSupplementRepository;
+import org.homerunball.pillmein.user.domain.User;
+import org.homerunball.pillmein.user.repository.UserRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class UserSupplementService {
+    private final UserSupplementRepository userSupplementRepository;
+    private final UserRepository userRepository;
+
+    public UserSupplementService(UserSupplementRepository userSupplementRepository, UserRepository userRepository) {
+        this.userSupplementRepository = userSupplementRepository;
+        this.userRepository = userRepository;
+    }
+
+    @Transactional
+    public void saveUserSupplement(Long userId, UserSupplementRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+
+        UserSupplement userSupplement = new UserSupplement();
+        userSupplement.setUser(user);
+        userSupplement.setSupplementName(request.supplementName());
+        userSupplement.setIngredients(request.ingredients());
+
+        userSupplementRepository.save(userSupplement);
+    }
+}
