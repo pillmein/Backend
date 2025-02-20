@@ -49,4 +49,13 @@ public class SupplementController {
         List<UserSupplementResponse> supplements = userSupplementService.getUserSupplements(userId);
         return SuccessResponse.of(HttpStatus.OK, "복용 중인 영양제 목록 조회 성공", supplements);
     }
+
+    @DeleteMapping("/mylist/{supplementId}")
+    public ResponseEntity<SuccessResponse<?>> deleteUserSupplement(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long supplementId) {
+
+        userSupplementService.deleteUserSupplement(userId, supplementId);
+        return SuccessResponse.of(HttpStatus.OK, "복용 중인 영양제 삭제 성공");
+    }
 }
