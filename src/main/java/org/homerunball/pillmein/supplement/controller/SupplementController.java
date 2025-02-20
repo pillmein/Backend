@@ -4,12 +4,15 @@ import org.homerunball.pillmein.common.dto.SuccessResponse;
 import org.homerunball.pillmein.supplement.controller.dto.SupplementSearchRequest;
 import org.homerunball.pillmein.supplement.controller.dto.SupplementSearchResponse;
 import org.homerunball.pillmein.supplement.controller.dto.UserSupplementRequest;
+import org.homerunball.pillmein.supplement.controller.dto.UserSupplementResponse;
 import org.homerunball.pillmein.supplement.service.SupplementService;
 import org.homerunball.pillmein.supplement.service.UserSupplementService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/supplements")
@@ -38,5 +41,12 @@ public class SupplementController {
             @RequestBody UserSupplementRequest request) {
         userSupplementService.saveUserSupplement(userId, request);
         return SuccessResponse.of(HttpStatus.OK, "복용 중인 영양제 저장 성공");
+    }
+
+    @GetMapping("/mylist")
+    public ResponseEntity<SuccessResponse<List<UserSupplementResponse>>> getUserSupplements(
+            @AuthenticationPrincipal Long userId) {
+        List<UserSupplementResponse> supplements = userSupplementService.getUserSupplements(userId);
+        return SuccessResponse.of(HttpStatus.OK, "복용 중인 영양제 목록 조회 성공", supplements);
     }
 }

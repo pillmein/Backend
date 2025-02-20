@@ -1,12 +1,16 @@
 package org.homerunball.pillmein.supplement.service;
 
 import org.homerunball.pillmein.supplement.controller.dto.UserSupplementRequest;
+import org.homerunball.pillmein.supplement.controller.dto.UserSupplementResponse;
 import org.homerunball.pillmein.supplement.domain.UserSupplement;
 import org.homerunball.pillmein.supplement.repository.UserSupplementRepository;
 import org.homerunball.pillmein.user.domain.User;
 import org.homerunball.pillmein.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserSupplementService {
@@ -29,5 +33,17 @@ public class UserSupplementService {
         userSupplement.setIngredients(request.ingredients());
 
         userSupplementRepository.save(userSupplement);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserSupplementResponse> getUserSupplements(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+
+        List<UserSupplement> userSupplements = userSupplementRepository.findByUser(user);
+
+        return userSupplements.stream()
+                .map(UserSupplementResponse::fromEntity)
+                .collect(Collectors.toList());
     }
 }
