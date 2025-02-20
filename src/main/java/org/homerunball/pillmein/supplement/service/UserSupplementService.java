@@ -46,4 +46,16 @@ public class UserSupplementService {
                 .map(UserSupplementResponse::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void deleteUserSupplement(Long userId, long supplementId) {
+        UserSupplement userSupplement = userSupplementRepository.findById(supplementId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 영양제를 찾을 수 없습니다."));
+
+        if (!userSupplement.getUser().getId().equals(userId)) {
+            throw new SecurityException("해당 영양제에 대한 삭제 권한이 없습니다.");
+        }
+
+        userSupplementRepository.delete(userSupplement);
+    }
 }
