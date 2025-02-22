@@ -1,6 +1,6 @@
 package org.homerunball.pillmein.intake.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import org.homerunball.pillmein.common.domain.BaseTimeEntity;
 import org.homerunball.pillmein.user.domain.User;
 import jakarta.persistence.*;
@@ -24,7 +24,7 @@ public class IntakeSummary extends BaseTimeEntity {
     private User user;
 
     @Column(name = "week_start")
-    private LocalDateTime weekStart;
+    private LocalDate weekStart;
 
     @Column(name = "taken_days")
     private Integer takenDays;

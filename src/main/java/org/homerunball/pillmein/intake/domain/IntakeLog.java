@@ -1,6 +1,6 @@
 package org.homerunball.pillmein.intake.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import org.homerunball.pillmein.common.domain.BaseTimeEntity;
 import org.homerunball.pillmein.user.domain.User;
 import jakarta.persistence.*;
@@ -26,8 +26,8 @@ public class IntakeLog extends BaseTimeEntity {
     private User user;
 
     @Column(name = "week_start")
-    private LocalDateTime weekStart;
+    private LocalDate weekStart;
 
     @Column(name = "intake_date")
-    private LocalDateTime intakeDate;
+    private LocalDate intakeDate;
 }
