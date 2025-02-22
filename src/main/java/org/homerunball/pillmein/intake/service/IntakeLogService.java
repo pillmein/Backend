@@ -1,6 +1,7 @@
 package org.homerunball.pillmein.intake.service;
 
 import org.homerunball.pillmein.intake.controller.dto.IntakeLogRequest;
+import org.homerunball.pillmein.intake.controller.dto.IntakeLogWeekResponse;
 import org.homerunball.pillmein.intake.domain.IntakeLog;
 import org.homerunball.pillmein.intake.repository.IntakeLogRepository;
 import org.homerunball.pillmein.user.domain.User;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,5 +45,23 @@ public class IntakeLogService {
         intakeLog.setWeekStart(weekStart);
 
         intakeLogRepository.save(intakeLog);
+    }
+
+    @Transactional(readOnly = true)
+    public IntakeLogWeekResponse getWeeklyIntakeLogs(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        LocalDate today = LocalDate.now();
+        LocalDate weekStart = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        LocalDate weekEnd = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+
+        List<IntakeLog> intakeLogs = intakeLogRepository.findByUserAndIntakeDateBetween(user, weekStart, weekEnd);
+
+        List<String> intakeDates = intakeLogs.stream()
+                .map(intakeLog -> intakeLog.getIntakeDate().toString())
+                .toList();
+
+        return new IntakeLogWeekResponse(intakeDates);
     }
 }
