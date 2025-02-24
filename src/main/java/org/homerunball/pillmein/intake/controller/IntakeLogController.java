@@ -1,6 +1,7 @@
 package org.homerunball.pillmein.intake.controller;
 
 import org.homerunball.pillmein.common.dto.SuccessResponse;
+import org.homerunball.pillmein.intake.controller.dto.IntakeLogDeleteRequest;
 import org.homerunball.pillmein.intake.controller.dto.IntakeLogRequest;
 import org.homerunball.pillmein.intake.controller.dto.IntakeLogWeekResponse;
 import org.homerunball.pillmein.intake.service.IntakeLogService;
@@ -31,5 +32,13 @@ public class IntakeLogController {
             @AuthenticationPrincipal Long userId) {
         IntakeLogWeekResponse response = intakeLogService.getWeeklyIntakeLogs(userId);
         return SuccessResponse.of(HttpStatus.OK, "이번 주 복용 기록 조회 성공", response);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<SuccessResponse<?>> deleteIntakeLog(
+            @AuthenticationPrincipal Long userId,
+            @RequestBody IntakeLogDeleteRequest request) {
+        intakeLogService.deleteIntakeLog(userId, request);
+        return SuccessResponse.of(HttpStatus.OK, "영양제 복용 기록이 삭제되었습니다.");
     }
 }

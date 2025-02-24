@@ -1,5 +1,6 @@
 package org.homerunball.pillmein.intake.service;
 
+import org.homerunball.pillmein.intake.controller.dto.IntakeLogDeleteRequest;
 import org.homerunball.pillmein.intake.controller.dto.IntakeLogRequest;
 import org.homerunball.pillmein.intake.controller.dto.IntakeLogWeekResponse;
 import org.homerunball.pillmein.intake.domain.IntakeLog;
@@ -63,5 +64,21 @@ public class IntakeLogService {
                 .toList();
 
         return new IntakeLogWeekResponse(intakeDates);
+    }
+
+    @Transactional
+    public void deleteIntakeLog(Long userId, IntakeLogDeleteRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        LocalDate intakeDate = LocalDate.parse(request.intakeDate());
+
+        boolean exists = intakeLogRepository.findByUserAndIntakeDate(user, intakeDate).isPresent();
+
+        if (!exists) {
+            throw new IllegalArgumentException("해당 날짜의 복용 기록을 찾을 수 없습니다.");
+        }
+
+        intakeLogRepository.deleteByUserAndIntakeDate(user, intakeDate);
     }
 }
