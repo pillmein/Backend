@@ -13,4 +13,6 @@ import java.util.Optional;
 public interface IntakeLogRepository extends JpaRepository<IntakeLog, Long> {
     Optional<IntakeLog> findByUserAndIntakeDate(User user, LocalDate intakeDate);
     List<IntakeLog> findByUserAndIntakeDateBetween(User user, LocalDate start, LocalDate end);
+
+    void deleteByUserAndIntakeDate(User user, LocalDate intakeDate);
 }
