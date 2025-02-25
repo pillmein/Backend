@@ -13,6 +13,9 @@ import java.util.Optional;
 public interface IntakeLogRepository extends JpaRepository<IntakeLog, Long> {
     Optional<IntakeLog> findByUserAndIntakeDate(User user, LocalDate intakeDate);
     List<IntakeLog> findByUserAndIntakeDateBetween(User user, LocalDate start, LocalDate end);
+    int countByUserAndWeekStart(User user, LocalDate weekStart);
 
     void deleteByUserAndIntakeDate(User user, LocalDate intakeDate);
+
+    List<LocalDate> findIntakeDatesByUserAndWeekStart(User user, LocalDate weekStart);
 }
