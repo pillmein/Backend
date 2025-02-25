@@ -11,4 +11,5 @@ import java.util.Optional;
 @Repository
 public interface IntakeSummaryRepository extends JpaRepository<IntakeSummary, Long> {
     Optional<IntakeSummary> findByUserAndWeekStart(User user, LocalDate weekStart);
+    boolean existsByWeekStart(LocalDate weekStart);
 }

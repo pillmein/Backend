@@ -97,4 +97,30 @@ public class IntakeSummaryService {
         }
         return Math.max(maxStreak, currentStreak);
     }
+
+    @Transactional
+    public void saveLastWeekIntakeSummary() {
+        LocalDate lastWeekStart = LocalDate.now()
+                .minusWeeks(1)
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+
+        boolean exists = intakeSummaryRepository.existsByWeekStart(lastWeekStart);
+        if (exists) {
+            System.out.println("지난 주 복용률이 이미 저장되어 있음. 저장하지 않음.");
+            return;
+        }
+
+        List<User> users = userRepository.findAll();
+
+        for (User user : users) {
+            int takenDays = intakeLogRepository.countByUserAndWeekStart(user, lastWeekStart);
+            IntakeSummary summary = new IntakeSummary();
+            summary.setUser(user);
+            summary.setWeekStart(lastWeekStart);
+            summary.setTakenDays(takenDays);
+            intakeSummaryRepository.save(summary);
+        }
+
+        System.out.println("지난 주 복용률 저장 완료");
+    }
 }
