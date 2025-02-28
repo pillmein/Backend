@@ -94,6 +94,7 @@ public class IntakeAlarmService {
         List<IntakeAlarmTimeResponse> alarmTimes = intakeAlarmRepository.findByUserAndUserSupplement(user, supplement)
                 .stream()
                 .map(intakeAlarm -> new IntakeAlarmTimeResponse(
+                        intakeAlarm.getId(),
                         intakeAlarm.getAlarmTime().toString(), // LocalTime → String 변환
                         intakeAlarm.getRepeatType() // 반복 주기 포함
                 ))
