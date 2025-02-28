@@ -1,6 +1,7 @@
 package org.homerunball.pillmein.intake.controller;
 
 import org.homerunball.pillmein.common.dto.SuccessResponse;
+import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmDetailResponse;
 import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmRequest;
 import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmResponse;
 import org.homerunball.pillmein.intake.service.IntakeAlarmService;
@@ -33,5 +34,13 @@ public class IntakeAlarmController {
             @AuthenticationPrincipal Long userId) {
         List<IntakeAlarmResponse> alarms = intakeAlarmService.getUserIntakeAlarms(userId);
         return SuccessResponse.of(HttpStatus.OK, "전체 영양제 알림 목록 조회 성공", alarms);
+    }
+
+    @GetMapping("/{supplementId}")
+    public ResponseEntity<SuccessResponse<IntakeAlarmDetailResponse>> getIntakeAlarmBySupplement(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long supplementId) {
+        IntakeAlarmDetailResponse alarmDetail = intakeAlarmService.getIntakeAlarmBySupplement(userId, supplementId);
+        return SuccessResponse.of(HttpStatus.OK, "단일 영양제 알림 목록 조회 성공", alarmDetail);
     }
 }

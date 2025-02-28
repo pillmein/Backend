@@ -1,7 +1,9 @@
 package org.homerunball.pillmein.intake.service;
 
+import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmDetailResponse;
 import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmRequest;
 import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmResponse;
+import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmTimeResponse;
 import org.homerunball.pillmein.intake.domain.IntakeAlarm;
 import org.homerunball.pillmein.intake.repository.IntakeAlarmRepository;
 import org.homerunball.pillmein.supplement.domain.UserSupplement;
@@ -79,5 +81,28 @@ public class IntakeAlarmService {
                     );
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public IntakeAlarmDetailResponse getIntakeAlarmBySupplement(Long userId, Long supplementId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        UserSupplement supplement = userSupplementRepository.findById(supplementId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 영양제를 찾을 수 없습니다."));
+
+        List<IntakeAlarmTimeResponse> alarmTimes = intakeAlarmRepository.findByUserAndUserSupplement(user, supplement)
+                .stream()
+                .map(intakeAlarm -> new IntakeAlarmTimeResponse(
+                        intakeAlarm.getAlarmTime().toString(), // LocalTime → String 변환
+                        intakeAlarm.getRepeatType() // 반복 주기 포함
+                ))
+                .collect(Collectors.toList());
+
+        return new IntakeAlarmDetailResponse(
+                supplement.getId(),
+                supplement.getSupplementName(),
+                alarmTimes
+        );
     }
 }
