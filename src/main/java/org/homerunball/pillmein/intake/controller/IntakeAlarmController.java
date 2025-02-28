@@ -53,4 +53,12 @@ public class IntakeAlarmController {
         intakeAlarmService.updateIntakeAlarm(userId, alarmId, request);
         return SuccessResponse.of(HttpStatus.OK, "알람이 성공적으로 수정되었습니다.");
     }
+
+    @DeleteMapping("/{alarmId}")
+    public ResponseEntity<SuccessResponse<?>> deleteIntakeAlarm(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long alarmId) {
+        intakeAlarmService.deleteIntakeAlarm(userId, alarmId);
+        return SuccessResponse.of(HttpStatus.OK, "알람이 성공적으로 삭제되었습니다.");
+    }
 }
