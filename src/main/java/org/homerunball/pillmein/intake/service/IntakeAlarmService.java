@@ -132,4 +132,15 @@ public class IntakeAlarmService {
 
         intakeAlarmRepository.save(intakeAlarm);
     }
+
+    @Transactional
+    public void deleteIntakeAlarm(Long userId, Long alarmId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        IntakeAlarm intakeAlarm = intakeAlarmRepository.findByIdAndUser(alarmId, user)
+                .orElseThrow(() -> new IllegalArgumentException("해당 알람을 찾을 수 없습니다."));
+
+        intakeAlarmRepository.deleteByIdAndUser(alarmId, user);
+    }
 }
