@@ -4,6 +4,7 @@ import org.homerunball.pillmein.common.dto.SuccessResponse;
 import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmDetailResponse;
 import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmRequest;
 import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmResponse;
+import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmUpdateRequest;
 import org.homerunball.pillmein.intake.service.IntakeAlarmService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,5 +43,14 @@ public class IntakeAlarmController {
             @PathVariable Long supplementId) {
         IntakeAlarmDetailResponse alarmDetail = intakeAlarmService.getIntakeAlarmBySupplement(userId, supplementId);
         return SuccessResponse.of(HttpStatus.OK, "단일 영양제 알림 목록 조회 성공", alarmDetail);
+    }
+
+    @PatchMapping("/{alarmId}")
+    public ResponseEntity<SuccessResponse<?>> updateIntakeAlarm(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long alarmId,
+            @RequestBody IntakeAlarmUpdateRequest request) {
+        intakeAlarmService.updateIntakeAlarm(userId, alarmId, request);
+        return SuccessResponse.of(HttpStatus.OK, "알람이 성공적으로 수정되었습니다.");
     }
 }
