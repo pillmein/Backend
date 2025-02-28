@@ -1,15 +1,16 @@
 package org.homerunball.pillmein.intake.controller;
 
 import org.homerunball.pillmein.common.dto.SuccessResponse;
+import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmDetailResponse;
 import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmRequest;
+import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmResponse;
 import org.homerunball.pillmein.intake.service.IntakeAlarmService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/intakes/alarm")
@@ -26,5 +27,20 @@ public class IntakeAlarmController {
             @RequestBody IntakeAlarmRequest request) {
         intakeAlarmService.createIntakeAlarm(userId, request);
         return SuccessResponse.of(HttpStatus.OK, "복용 알림이 저장되었습니다.");
+    }
+
+    @GetMapping
+    public ResponseEntity<SuccessResponse<List<IntakeAlarmResponse>>> getAllIntakeAlarms(
+            @AuthenticationPrincipal Long userId) {
+        List<IntakeAlarmResponse> alarms = intakeAlarmService.getUserIntakeAlarms(userId);
+        return SuccessResponse.of(HttpStatus.OK, "전체 영양제 알림 목록 조회 성공", alarms);
+    }
+
+    @GetMapping("/{supplementId}")
+    public ResponseEntity<SuccessResponse<IntakeAlarmDetailResponse>> getIntakeAlarmBySupplement(
+            @AuthenticationPrincipal Long userId,
+            @PathVariable Long supplementId) {
+        IntakeAlarmDetailResponse alarmDetail = intakeAlarmService.getIntakeAlarmBySupplement(userId, supplementId);
+        return SuccessResponse.of(HttpStatus.OK, "단일 영양제 알림 목록 조회 성공", alarmDetail);
     }
 }

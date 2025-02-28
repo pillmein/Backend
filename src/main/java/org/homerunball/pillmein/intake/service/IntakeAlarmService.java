@@ -1,6 +1,9 @@
 package org.homerunball.pillmein.intake.service;
 
+import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmDetailResponse;
 import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmRequest;
+import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmResponse;
+import org.homerunball.pillmein.intake.controller.dto.IntakeAlarmTimeResponse;
 import org.homerunball.pillmein.intake.domain.IntakeAlarm;
 import org.homerunball.pillmein.intake.repository.IntakeAlarmRepository;
 import org.homerunball.pillmein.supplement.domain.UserSupplement;
@@ -11,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class IntakeAlarmService {
@@ -52,5 +57,52 @@ public class IntakeAlarmService {
         intakeAlarm.setRepeatType(request.repeatType());
 
         intakeAlarmRepository.save(intakeAlarm);
+    }
+
+    @Transactional(readOnly = true)
+    public List<IntakeAlarmResponse> getUserIntakeAlarms(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        List<UserSupplement> userSupplements = userSupplementRepository.findByUser(user);
+
+        return userSupplements.stream()
+                .map(supplement -> {
+                    List<String> alarmTimes = intakeAlarmRepository.findByUserAndUserSupplement(user, supplement)
+                            .stream()
+                            .map(intakeAlarm -> intakeAlarm.getAlarmTime().toString())
+                            .collect(Collectors.toList());
+
+                    return new IntakeAlarmResponse(
+                            supplement.getId(),
+                            supplement.getSupplementName(),
+                            supplement.getIngredients(),
+                            alarmTimes
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public IntakeAlarmDetailResponse getIntakeAlarmBySupplement(Long userId, Long supplementId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        UserSupplement supplement = userSupplementRepository.findById(supplementId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 영양제를 찾을 수 없습니다."));
+
+        List<IntakeAlarmTimeResponse> alarmTimes = intakeAlarmRepository.findByUserAndUserSupplement(user, supplement)
+                .stream()
+                .map(intakeAlarm -> new IntakeAlarmTimeResponse(
+                        intakeAlarm.getAlarmTime().toString(), // LocalTime → String 변환
+                        intakeAlarm.getRepeatType() // 반복 주기 포함
+                ))
+                .collect(Collectors.toList());
+
+        return new IntakeAlarmDetailResponse(
+                supplement.getId(),
+                supplement.getSupplementName(),
+                alarmTimes
+        );
     }
 }
