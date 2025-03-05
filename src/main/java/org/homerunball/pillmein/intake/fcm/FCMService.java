@@ -68,7 +68,7 @@ public class FCMService {
     }
 
     private void sendPushMessage(String message) {
-        log.info("✅ FCM 메시지 전송 시작...");  // ✅ 로그 추가
+        log.info("FCM 메시지 전송 시작...");
 
         try {
             OkHttpClient client = new OkHttpClient();
@@ -95,11 +95,9 @@ public class FCMService {
             googleCredentials.refreshIfExpired();
             String token = googleCredentials.getAccessToken().getTokenValue();
 
-            log.info("🔥 Firebase Access Token: {}", token); // ✅ 추가된 로그
-
             return token;
         } catch (IOException e) {
-            log.error("🚨 Firebase Access Token을 가져오는 데 실패했습니다.", e);
+            log.error("Firebase Access Token을 가져오는 데 실패했습니다.", e);
             throw new IllegalArgumentException("Firebase Access Token을 가져오는 데 실패했습니다.", e);
         }
     }
