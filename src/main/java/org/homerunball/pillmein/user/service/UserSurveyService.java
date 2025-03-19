@@ -47,20 +47,21 @@ public class UserSurveyService {
         userSurvey.setCaffeineIntake(Objects.requireNonNull(requestDto.caffeineIntake(), "caffeineIntake 필수 입력"));
         userSurvey.setMealPattern(Objects.requireNonNull(requestDto.mealPattern(), "mealPattern 필수 입력"));
         userSurvey.setAlcoholFrequency(Objects.requireNonNull(requestDto.alcoholFrequency(), "alcoholFrequency 필수 입력"));
-        userSurvey.setPhysicalFatigue(Objects.requireNonNull(requestDto.physicalFatigue(), "physicalFatigue 필수 입력"));
-        userSurvey.setMentalFatigue(Objects.requireNonNull(requestDto.mentalFatigue(), "mentalFatigue 필수 입력"));
-        userSurvey.setDigestionIssues(Objects.requireNonNull(requestDto.digestionIssues(), "digestionIssues 필수 입력"));
-        userSurvey.setHeadacheDizziness(Objects.requireNonNull(requestDto.headacheDizziness(), "headacheDizziness 필수 입력"));
-        userSurvey.setInfectionFrequency(Objects.requireNonNull(requestDto.infectionFrequency(), "infectionFrequency 필수 입력"));
-        userSurvey.setSkinConcern(Objects.requireNonNull(requestDto.skinConcern(), "skinConcern 필수 입력"));
-        userSurvey.setWeightChange(Objects.requireNonNull(requestDto.weightChange(), "weightChange 필수 입력"));
-        userSurvey.setDietMethod(Objects.requireNonNull(requestDto.dietMethod(), "dietMethod 필수 입력"));
-        userSurvey.setSleepDisruption(Objects.requireNonNull(requestDto.sleepDisruption(), "sleepDisruption 필수 입력"));
-        userSurvey.setSeasonalDiscomfort(Objects.requireNonNull(requestDto.seasonalDiscomfort(), "seasonalDiscomfort 필수 입력"));
-        userSurvey.setEyeFatigue(Objects.requireNonNull(requestDto.eyeFatigue(), "eyeFatigue 필수 입력"));
-        userSurvey.setPainFrequency(Objects.requireNonNull(requestDto.painFrequency(), "painFrequency 필수 입력"));
-        userSurvey.setFocusMemoryIssues(Objects.requireNonNull(requestDto.focusMemoryIssues(), "focusMemoryIssues 필수 입력"));
-        userSurvey.setBrittleNailsHair(Objects.requireNonNull(requestDto.brittleNailsHair(), "brittleNailsHair 필수 입력"));
+        userSurvey.setPhysicalFatigue(requestDto.physicalFatigue());
+        userSurvey.setMentalFatigue(requestDto.mentalFatigue());
+        userSurvey.setDigestionIssues(requestDto.digestionIssues());
+        userSurvey.setHeadacheDizziness(requestDto.headacheDizziness());
+        userSurvey.setInfectionFrequency(requestDto.infectionFrequency());
+        userSurvey.setSkinConcern(requestDto.skinConcern());
+        userSurvey.setWeightChange(requestDto.weightChange());
+        userSurvey.setDietMethod(requestDto.dietMethod());
+        userSurvey.setSleepDisruption(requestDto.sleepDisruption());
+        userSurvey.setSeasonalDiscomfort(requestDto.seasonalDiscomfort());
+        userSurvey.setEyeFatigue(requestDto.eyeFatigue());
+        userSurvey.setPainFrequency(requestDto.painFrequency());
+        userSurvey.setFocusMemoryIssues(requestDto.focusMemoryIssues());
+        userSurvey.setBrittleNailsHair(requestDto.brittleNailsHair());
+        userSurvey.setHealthPurpose(requestDto.healthPurpose());
     }
 
     private void updateNonNullFields(UserSurvey userSurvey, UserSurveyRequestDto requestDto) {
@@ -85,5 +86,6 @@ public class UserSurveyService {
         if (requestDto.painFrequency() != null) userSurvey.setPainFrequency(requestDto.painFrequency());
         if (requestDto.focusMemoryIssues() != null) userSurvey.setFocusMemoryIssues(requestDto.focusMemoryIssues());
         if (requestDto.brittleNailsHair() != null) userSurvey.setBrittleNailsHair(requestDto.brittleNailsHair());
+        if (requestDto.healthPurpose() != null) userSurvey.setHealthPurpose(requestDto.healthPurpose());
     }
 }

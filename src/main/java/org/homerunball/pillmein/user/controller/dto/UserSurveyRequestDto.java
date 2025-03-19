@@ -27,5 +27,7 @@ public record UserSurveyRequestDto(
         String eyeFatigue,
         String painFrequency,
         String focusMemoryIssues,
-        String brittleNailsHair
+        String brittleNailsHair,
+
+        String healthPurpose
 ) {}

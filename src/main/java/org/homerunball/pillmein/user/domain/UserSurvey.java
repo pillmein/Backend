@@ -85,4 +85,7 @@ public class UserSurvey extends BaseTimeEntity {
 
     @Column(name = "brittle_nails_hair")
     private String brittleNailsHair;
+
+    @Column(name = "health_purpose", columnDefinition = "TEXT")
+    private String healthPurpose;
 }
