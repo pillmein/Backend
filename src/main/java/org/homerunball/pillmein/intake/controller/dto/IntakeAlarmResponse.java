@@ -6,6 +6,6 @@ public record IntakeAlarmResponse(
         Long supplementId,
         String supplementName,
         String ingredients,
-        List<String> alarmTimes
+        int alarmCount
 ) {
 }

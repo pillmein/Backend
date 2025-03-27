@@ -26,8 +26,13 @@ public class IntakeAlarmController {
     public ResponseEntity<SuccessResponse<?>> createIntakeAlarm(
             @AuthenticationPrincipal Long userId,
             @RequestBody IntakeAlarmRequest request) {
-        intakeAlarmService.createIntakeAlarm(userId, request);
-        return SuccessResponse.of(HttpStatus.OK, "복용 알림이 저장되었습니다.");
+        boolean isSaved = intakeAlarmService.createIntakeAlarm(userId, request);
+
+        if (isSaved) {
+            return SuccessResponse.of(HttpStatus.OK, "복용 알림이 저장되었습니다.");
+        } else {
+            return SuccessResponse.of(HttpStatus.OK, "이미 동일한 시간의 복용 알림이 존재합니다.");
+        }
     }
 
     @GetMapping
