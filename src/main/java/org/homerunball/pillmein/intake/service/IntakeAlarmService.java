@@ -67,16 +67,13 @@ public class IntakeAlarmService {
 
         return userSupplements.stream()
                 .map(supplement -> {
-                    List<String> alarmTimes = intakeAlarmRepository.findByUserAndUserSupplement(user, supplement)
-                            .stream()
-                            .map(intakeAlarm -> intakeAlarm.getAlarmTime().toString())
-                            .collect(Collectors.toList());
+                    int alarmCount = intakeAlarmRepository.findByUserAndUserSupplement(user, supplement).size();
 
                     return new IntakeAlarmResponse(
                             supplement.getId(),
                             supplement.getSupplementName(),
                             supplement.getIngredients(),
-                            alarmTimes
+                            alarmCount
                     );
                 })
                 .collect(Collectors.toList());
