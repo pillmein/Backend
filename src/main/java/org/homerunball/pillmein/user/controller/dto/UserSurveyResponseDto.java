@@ -23,7 +23,8 @@ public record UserSurveyResponseDto(
         String eyeFatigue,
         String painFrequency,
         String focusMemoryIssues,
-        String brittleNailsHair
+        String brittleNailsHair,
+        String healthPurpose
 ) {
     public static UserSurveyResponseDto from(UserSurvey userSurvey) {
         return new UserSurveyResponseDto(
@@ -47,7 +48,8 @@ public record UserSurveyResponseDto(
                 userSurvey.getEyeFatigue(),
                 userSurvey.getPainFrequency(),
                 userSurvey.getFocusMemoryIssues(),
-                userSurvey.getBrittleNailsHair()
+                userSurvey.getBrittleNailsHair(),
+                userSurvey.getHealthPurpose()
         );
     }
 }
