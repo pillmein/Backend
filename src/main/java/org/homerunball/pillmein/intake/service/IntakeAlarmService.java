@@ -30,7 +30,7 @@ public class IntakeAlarmService {
     }
 
     @Transactional
-    public void createIntakeAlarm(Long userId, IntakeAlarmRequest request) {
+    public boolean createIntakeAlarm(Long userId, IntakeAlarmRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
@@ -45,7 +45,7 @@ public class IntakeAlarmService {
 
         boolean alarmExists = intakeAlarmRepository.existsByUserAndUserSupplementAndAlarmTime(user, userSupplement, alarmTime);
         if (alarmExists) {
-            throw new IllegalStateException("이미 동일한 시간에 설정된 복용 알림이 존재합니다.");
+            return false;
         }
 
         IntakeAlarm intakeAlarm = new IntakeAlarm();
@@ -55,6 +55,7 @@ public class IntakeAlarmService {
         intakeAlarm.setRepeatType(request.repeatType());
 
         intakeAlarmRepository.save(intakeAlarm);
+        return true;
     }
 
     @Transactional(readOnly = true)
