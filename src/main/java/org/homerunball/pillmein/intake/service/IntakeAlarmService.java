@@ -2,7 +2,9 @@ package org.homerunball.pillmein.intake.service;
 
 import org.homerunball.pillmein.intake.controller.dto.*;
 import org.homerunball.pillmein.intake.domain.IntakeAlarm;
+import org.homerunball.pillmein.intake.domain.RecommendedIntakeTime;
 import org.homerunball.pillmein.intake.repository.IntakeAlarmRepository;
+import org.homerunball.pillmein.intake.repository.RecommendedIntakeTimeRepository;
 import org.homerunball.pillmein.supplement.domain.UserSupplement;
 import org.homerunball.pillmein.supplement.repository.UserSupplementRepository;
 import org.homerunball.pillmein.user.domain.User;
@@ -20,13 +22,16 @@ public class IntakeAlarmService {
     private final IntakeAlarmRepository intakeAlarmRepository;
     private final UserRepository userRepository;
     private final UserSupplementRepository userSupplementRepository;
+    private final RecommendedIntakeTimeRepository recommendedIntakeTimeRepository;
 
     public IntakeAlarmService(IntakeAlarmRepository intakeAlarmRepository,
                               UserRepository userRepository,
-                              UserSupplementRepository userSupplementRepository) {
+                              UserSupplementRepository userSupplementRepository,
+                              RecommendedIntakeTimeRepository recommendedIntakeTimeRepository) {
         this.intakeAlarmRepository = intakeAlarmRepository;
         this.userRepository = userRepository;
         this.userSupplementRepository = userSupplementRepository;
+        this.recommendedIntakeTimeRepository = recommendedIntakeTimeRepository;
     }
 
     @Transactional
@@ -141,4 +146,24 @@ public class IntakeAlarmService {
 
         intakeAlarmRepository.deleteByIdAndUser(alarmId, user);
     }
+
+    @Transactional(readOnly = true)
+    public RecommendedIntakeTimeResponse getRecommendedTime(Long userId, Long supplementId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        UserSupplement supplement = userSupplementRepository.findById(supplementId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 영양제를 찾을 수 없습니다."));
+
+        RecommendedIntakeTime recommended = recommendedIntakeTimeRepository
+                .findByUserAndUserSupplement(user, supplement)
+                .orElseThrow(() -> new IllegalArgumentException("추천 복용 시간 정보가 없습니다."));
+
+        return new RecommendedIntakeTimeResponse(
+                supplement.getId(),
+                recommended.getRecommendedTime().toString(),
+                recommended.getAdvice()
+        );
+    }
+
 }
