@@ -17,6 +17,13 @@ public enum ErrorCode {
     /* 네이버 API 관련 에러 */
     NAVER_API_ERROR("네이버 쇼핑 API 호출 중 오류가 발생했습니다."),
 
+    /* 네이버 CLOVA CSR 관련 에러 */
+    VOICE_FILE_EMPTY("음성 파일이 비어 있습니다."),
+    INVALID_FILE_EXTENSION("mp3 형식의 파일만 허용됩니다."),
+    FILE_SIZE_EXCEEDED("파일 크기는 3MB를 초과할 수 없습니다."),
+    STT_FAILED("음성 인식 중 오류가 발생했습니다."),
+    STT_EMPTY_RESULT("음성 인식 결과가 없습니다."),
+
     /* 소셜 로그인 관련 에러 */
     INVALID_ID_TOKEN("유효하지 않은 ID 토큰입니다."),
     UNSUPPORTED_PROVIDER("지원하지 않는 소셜 로그인 제공자입니다."),
