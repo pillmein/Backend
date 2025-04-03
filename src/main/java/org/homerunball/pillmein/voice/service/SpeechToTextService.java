@@ -3,6 +3,7 @@ package org.homerunball.pillmein.voice.service;
 import lombok.RequiredArgsConstructor;
 import org.homerunball.pillmein.common.exception.ErrorCode;
 import org.homerunball.pillmein.common.exception.PillmeinException;
+import org.homerunball.pillmein.voice.util.AudioConvertUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,9 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Map;
 
 @Service
@@ -28,10 +31,25 @@ public class SpeechToTextService {
     private static final String CLOVA_API_URL = "https://naveropenapi.apigw.ntruss.com/recog/v1/stt?lang=Kor";
 
     public String recognize(MultipartFile voiceFile) {
-        validateFile(voiceFile);
+        if (voiceFile.isEmpty()) {
+            throw new PillmeinException(ErrorCode.VOICE_FILE_EMPTY);
+        }
 
         try {
-            byte[] fileBytes = StreamUtils.copyToByteArray(voiceFile.getInputStream());
+            File uploadedFile = AudioConvertUtil.multipartToFile(voiceFile);
+            File fileToSend;
+
+            if (voiceFile.getOriginalFilename() != null &&
+                    voiceFile.getOriginalFilename().toLowerCase().endsWith(".m4a")) {
+                fileToSend = AudioConvertUtil.convertM4aToMp3(uploadedFile);
+            } else if (voiceFile.getOriginalFilename() != null &&
+                    voiceFile.getOriginalFilename().toLowerCase().endsWith(".mp3")) {
+                fileToSend = uploadedFile;
+            } else {
+                throw new PillmeinException(ErrorCode.INVALID_FILE_EXTENSION);
+            }
+
+            byte[] fileBytes = Files.readAllBytes(fileToSend.toPath());
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
@@ -57,7 +75,7 @@ public class SpeechToTextService {
                 throw new PillmeinException(ErrorCode.STT_FAILED);
             }
 
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             throw new PillmeinException(ErrorCode.STT_FAILED);
         }
     }
