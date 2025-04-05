@@ -1,5 +1,6 @@
 package org.homerunball.pillmein.intake.service;
 
+import org.homerunball.pillmein.common.exception.ErrorCode;
 import org.homerunball.pillmein.intake.controller.dto.*;
 import org.homerunball.pillmein.intake.domain.IntakeAlarm;
 import org.homerunball.pillmein.intake.domain.RecommendedIntakeTime;
@@ -11,6 +12,7 @@ import org.homerunball.pillmein.user.domain.User;
 import org.homerunball.pillmein.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.homerunball.pillmein.common.exception.EntityNotFoundException;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
@@ -157,7 +159,7 @@ public class IntakeAlarmService {
 
         RecommendedIntakeTime recommended = recommendedIntakeTimeRepository
                 .findByUserAndUserSupplement(user, supplement)
-                .orElseThrow(() -> new IllegalArgumentException("추천 복용 시간 정보가 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NOT_FOUND_ENTITY));
 
         return new RecommendedIntakeTimeResponse(
                 supplement.getId(),
