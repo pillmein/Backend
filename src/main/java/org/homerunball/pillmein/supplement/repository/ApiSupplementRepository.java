@@ -10,7 +10,14 @@ import java.util.List;
 
 @Repository
 public interface ApiSupplementRepository extends JpaRepository<ApiSupplement, Long> {
-    @Query(value = "SELECT * FROM api_supplements WHERE name_tsv @@ plainto_tsquery(:name)", nativeQuery = true)
+    @Query(value = """
+    SELECT * FROM api_supplements 
+    WHERE name_tsv @@ plainto_tsquery(:name)
+    OR name ILIKE CONCAT('%', :name, '%')
+    OR similarity(name, :name) > 0.4
+    ORDER BY similarity(name, :name) DESC
+    LIMIT 5
+""", nativeQuery = true)
     List<ApiSupplement> findByFullTextSearch(@Param("name") String name);
 }
 
