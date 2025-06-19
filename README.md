@@ -113,9 +113,7 @@ docker-compose up -d --build //배포 환경
 - 주요 테스트 API
   - 사용자 인증: `/auth/login`
   - 건강 설문 응답 등록: `/user/survey`
-  - 영양제 추천 요청: `/supplement/recommend`
   - 복용 기록 등록: `/intake/log`
-  - 복용 시간 추천: `/intake/recommend-time`
   - 음성 텍스트 변환: `/voice/stt`
 - [📘 Pill Me In API 명세서](https://concrete-cent-c8a.notion.site/API-19acd343f4c58079bb5bc922e5e6b25b)
 
